@@ -27,3 +27,6 @@ apps/backend/data
 *.swp
 
 .turbo
+
+.yarnrc.yml
+.yarn/*

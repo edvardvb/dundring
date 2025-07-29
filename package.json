@@ -4,7 +4,7 @@
   "description": "",
   "author": "sivertschou",
   "private": true,
-  "packageManager": "yarn@1.22.18",
+  "packageManager": "yarn@4.9.2",
   "scripts": {
     "prepare": "husky && bash scripts/print_dundring.sh",
     "dev": "FORCE_COLOR=1 turbo run dev",
@@ -13,9 +13,11 @@
     "build": "turbo run build",
     "build:backend": "yarn --cwd apps/backend build",
     "build:frontend": "yarn --cwd apps/frontend build",
+    "build:diary": "yarn --cwd apps/diary build",
     "test": "turbo run test",
     "frontend": "yarn --cwd apps/frontend start",
     "backend": "yarn --cwd apps/backend start",
+    "diary": "yarn --cwd apps/diary start",
     "clean": "rm -rf node_modules */**/node_modules */**/.turbo */**/dist */**/build"
   },
   "devDependencies": {
