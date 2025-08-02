@@ -72,10 +72,17 @@ export const calculateWeeklySummary = (
 /**
  * Formats time in seconds to HH:MM format
  */
-export const formatTime = (seconds: number): string => {
+export const formatTime = (
+  seconds: number,
+  includeSeconds: boolean = false
+): string => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
-  return `${hours}:${minutes.toString().padStart(2, '0')}`;
+  const secs = Math.floor(seconds % 60);
+
+  return includeSeconds
+    ? `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+    : `${hours}:${minutes.toString().padStart(2, '0')}`;
 };
 
 /**
