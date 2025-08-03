@@ -1,5 +1,3 @@
-'use client';
-
 import { CalendarData, DAYS_OF_WEEK } from '@/types/calendar';
 import { CalendarDay } from '@/components/CalendarDay';
 import { WeeklySummary } from '@/components/WeeklySummary';

@@ -32,7 +32,6 @@ const getActivities = async (start_date: Date) => {
     }
   );
   const activities = (await res.json()) as icu.Activity[];
-  console.log('Fetched activities:', activities);
   return activities;
 };
 

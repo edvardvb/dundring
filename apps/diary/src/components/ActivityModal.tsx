@@ -2,6 +2,7 @@
 
 import * as icu from '@intervals-icu/js-data-model';
 import * as Dialog from '@radix-ui/react-dialog';
+import { useEffect, useState } from 'react';
 import {
   formatTime,
   formatDistance,
@@ -22,12 +23,62 @@ import {
   WidthIcon,
   BarChartIcon,
 } from '@radix-ui/react-icons';
+import { getActivity } from '@/utils/getActivity';
 
 interface ActivityModalProps {
-  activity: icu.Activity;
+  activityId: string;
+  isOpen: boolean;
 }
 
-export function ActivityModal({ activity }: ActivityModalProps) {
+export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
+  const [activity, setActivity] = useState<icu.Activity | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // BYTT UT MED FETCH AV STREAMS PÅ SIKT?
+  useEffect(() => {
+    if (isOpen && activityId && !activity) {
+      setIsLoading(true);
+      getActivity(activityId)
+        .then((fetchedActivity) => {
+          if (fetchedActivity) {
+            setActivity(fetchedActivity);
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to fetch activity:', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [isOpen, activityId, activity]);
+
+  if (!activity && isLoading) {
+    return (
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+        <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 rounded-lg shadow-xl z-50 w-7xl max-w-[90vw]">
+          <Dialog.Title className="text-2xl font-semibold">
+            Loading activity...
+          </Dialog.Title>
+        </Dialog.Content>
+      </Dialog.Portal>
+    );
+  }
+
+  if (!activity) {
+    return (
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
+        <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 rounded-lg shadow-xl z-50 w-7xl max-w-[90vw]">
+          <Dialog.Title className="text-2xl font-semibold">
+            Loading activity failed
+          </Dialog.Title>
+        </Dialog.Content>
+      </Dialog.Portal>
+    );
+  }
+  console.log('Activity data:', activity);
   const typeConfig = getActivityTypeConfig(activity.type);
 
   // Helper function to safely convert to number
@@ -120,7 +171,7 @@ export function ActivityModal({ activity }: ActivityModalProps) {
             } as React.CSSProperties
           }
         >
-          <Box className="">
+          <Box>
             <Flex
               direction="row"
               align="center"
@@ -254,7 +305,7 @@ export function ActivityModal({ activity }: ActivityModalProps) {
                   <FormattedTableRow
                     label="Cadence"
                     avgValue={`${Math.round(toNumber(activity.average_cadence))} rpm`}
-                    maxValue={`${Math.round(toNumber(activity.icu_intervals?.[0].max_cadence))} rpm`}
+                    maxValue="TODO"
                   />
 
                   <Table.Row>

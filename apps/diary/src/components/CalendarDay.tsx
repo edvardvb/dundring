@@ -1,7 +1,5 @@
-'use client';
-
 import { CalendarDay as CalendarDayType } from '@/types/calendar';
-import { ActivityItem } from '@/components/ActivityItem';
+import { ActivityItemWrapper } from '@/components/ActivityItemWrapper';
 
 interface CalendarDayProps {
   day: CalendarDayType;
@@ -39,7 +37,7 @@ export function CalendarDay({ day }: CalendarDayProps) {
       {/* Activities */}
       <div className="space-y-1">
         {day.activities.map((activity, index) => (
-          <ActivityItem key={activity.id || index} activity={activity} />
+          <ActivityItemWrapper key={activity.id || index} activity={activity} />
         ))}
       </div>
     </div>
