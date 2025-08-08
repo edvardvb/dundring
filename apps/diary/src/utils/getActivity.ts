@@ -19,3 +19,21 @@ export async function getActivity(id: string): Promise<icu.Activity | null> {
   const activity = (await res.json()) as icu.Activity;
   return activity;
 }
+
+export async function getRoute(id: string) {
+  if (!process.env.INTERVALS_ICU_B64_AUTH) {
+    throw new Error('Missing environment variables for Intervals.icu API');
+  }
+  console.log('Fetching activity with ID:', id);
+
+  const res = await fetch(`https://intervals.icu/api/v1/activity/${id}/map`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      authorization: `Basic ${process.env.INTERVALS_ICU_B64_AUTH}`,
+    },
+  });
+  const route = await res.json();
+  return route;
+}

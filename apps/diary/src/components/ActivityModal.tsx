@@ -3,6 +3,7 @@
 import * as icu from '@intervals-icu/js-data-model';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
   formatTime,
   formatDistance,
@@ -23,7 +24,18 @@ import {
   WidthIcon,
   BarChartIcon,
 } from '@radix-ui/react-icons';
-import { getActivity } from '@/utils/getActivity';
+import { getActivity, getRoute } from '@/utils/getActivity';
+import { MapProps } from '@/components/Map';
+
+// Dynamically import the map component to avoid SSR issues
+const Map = dynamic(() => import('@/components/Map'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-96 bg-gray-700 rounded flex items-center justify-center">
+      Loading map...
+    </div>
+  ),
+}) as React.ComponentType<MapProps>;
 
 interface ActivityModalProps {
   activityId: string;
@@ -32,6 +44,12 @@ interface ActivityModalProps {
 
 export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
   const [activity, setActivity] = useState<icu.Activity | null>(null);
+  const [route, setRoute] = useState<{
+    bounds: [number, number][];
+    latlngs: [number, number][];
+    weather: object;
+    route: object;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // BYTT UT MED FETCH AV STREAMS PÅ SIKT?
@@ -53,7 +71,27 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
     }
   }, [isOpen, activityId, activity]);
 
-  if (!activity && isLoading) {
+  useEffect(() => {
+    if (isOpen && activityId && !route) {
+      setIsLoading(true);
+      getRoute(activityId)
+        .then((fetchedRoute) => {
+          if (fetchedRoute) {
+            setRoute(fetchedRoute);
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to fetch route:', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [isOpen, activityId, route]);
+
+  console.log(route);
+
+  if ((!activity || !route) && isLoading) {
     return (
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
@@ -66,7 +104,7 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
     );
   }
 
-  if (!activity) {
+  if (!activity || !route) {
     return (
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
@@ -140,8 +178,6 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
     </Table.Row>
   );
 
-  //console.log(activity);
-
   return (
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
@@ -167,7 +203,6 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
               background: `linear-gradient(to top right, ${typeConfig.backgroundColor}, ${typeConfig.borderColor})`,
               boxShadow: `0 1px 20px -5px ${typeConfig.borderColor}`,
               borderRadius: '10px',
-              '--gray-12': 'white',
             } as React.CSSProperties
           }
         >
@@ -227,11 +262,12 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
             </Flex>
           </Box>
         </Box>
+
         <Flex
           direction="row"
           justify="between"
           className="mt-4 mb-6"
-          style={{ gap: '2rem' }}
+          style={{ gap: '1.5rem' }}
         >
           <DataList.Root className="p-4">
             <FormattedDataListItem
@@ -276,7 +312,7 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
 
           <Theme accentColor="indigo">
             <div className="w-sm">
-              <Table.Root size="1">
+              <Table.Root size="3">
                 <Table.Header>
                   <Table.Row>
                     <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
@@ -321,6 +357,25 @@ export function ActivityModal({ activityId, isOpen }: ActivityModalProps) {
               </Table.Root>
             </div>
           </Theme>
+
+          <div
+            className="h-96 w-full max-w-1/3"
+            style={
+              {
+                background: typeConfig.borderColor,
+                borderRadius: '10px',
+                border: `7px solid ${typeConfig.borderColor}`,
+                boxShadow: `0 1px 20px -5px ${typeConfig.borderColor}`,
+              } as React.CSSProperties
+            }
+          >
+            <Map
+              route={route.latlngs}
+              bounds={route.bounds}
+              id="map"
+              className="h-full w-full"
+            />
+          </div>
         </Flex>
       </Dialog.Content>
     </Dialog.Portal>
