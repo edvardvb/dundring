@@ -1,5 +1,5 @@
 import { CalendarDay as CalendarDayType } from '@/types/calendar';
-import { ActivityItemWrapper } from '@/components/ActivityItemWrapper';
+import { ActivityItemWrapper } from '@/components/activity/ActivityItemWrapper';
 
 interface CalendarDayProps {
   day: CalendarDayType;

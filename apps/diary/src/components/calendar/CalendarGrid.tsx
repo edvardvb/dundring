@@ -1,7 +1,7 @@
 import { CalendarData, DAYS_OF_WEEK } from '@/types/calendar';
-import { CalendarDay } from './calendar/CalendarDay';
-import { WeeklySummary } from './calendar/WeeklySummary';
-import { MonthNavigation } from './calendar/MonthNavigation';
+import { CalendarDay } from './CalendarDay';
+import { WeeklySummary } from './WeeklySummary';
+import { MonthNavigation } from './MonthNavigation';
 import { DecorativeBox } from '@/components/ui';
 import { Grid } from '@radix-ui/themes';
 import { Fragment } from 'react';

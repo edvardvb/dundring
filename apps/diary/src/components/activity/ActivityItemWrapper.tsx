@@ -2,10 +2,11 @@
 
 import * as icu from '@intervals-icu/js-data-model';
 import * as Dialog from '@radix-ui/react-dialog';
-import { ActivityModal } from '@/components/ActivityModal';
+//import { ActivityModal } from './ActivityModal';
 
 import { useState } from 'react';
-import { ActivityItem } from '@/components/ActivityItem';
+import { ActivityItem } from './ActivityItem';
+import dynamic from 'next/dynamic';
 
 interface ActivityItemProps {
   activity: icu.Activity;
@@ -13,6 +14,10 @@ interface ActivityItemProps {
 
 export function ActivityItemWrapper({ activity }: ActivityItemProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const ActivityModal = dynamic(() => import('./ActivityModal/ActivityModal'), {
+    ssr: false,
+  });
 
   return (
     <Dialog.Root modal open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -22,7 +27,7 @@ export function ActivityItemWrapper({ activity }: ActivityItemProps) {
         </div>
       </Dialog.Trigger>
 
-      <ActivityModal activityId={activity.id!} isOpen={isModalOpen} />
+      <ActivityModal activity={activity} isOpen={isModalOpen} />
     </Dialog.Root>
   );
 }

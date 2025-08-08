@@ -1,5 +1,5 @@
 import * as icu from '@intervals-icu/js-data-model';
-import { CalendarGrid } from '@/components/CalendarGrid';
+import { CalendarGrid } from '@/components';
 import { generateCalendarData } from '@/utils/calendar';
 import { endOfMonth, endOfWeek, startOfMonth, startOfWeek } from 'date-fns';
 
@@ -39,7 +39,6 @@ export default async function Page(props: {
   searchParams: Promise<{ date?: string }>;
 }) {
   const params = await props.searchParams;
-  console.log('Params:', params);
   const start_date = params.date ? new Date(params.date) : new Date();
 
   const activities = await getActivities(start_date);

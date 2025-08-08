@@ -1,42 +1,25 @@
 'use client';
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Polyline,
-} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
+
 import L from 'leaflet';
 
-// Fix for default markers in react-leaflet
-const iconDefault = L.Icon.Default.prototype as unknown as {
-  _getIconUrl?: () => void;
-};
-delete iconDefault._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl:
-    'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-});
-
-export interface MapProps {
+export interface ActivityMapProps {
   route: [number, number][];
   bounds: [number, number][];
   id: string;
   className?: string;
 }
 
-export default function Map({
+export function ActivityMap({
   route,
   bounds,
   id,
   className = 'h-96',
-}: MapProps) {
+}: ActivityMapProps) {
   const lineOptions = { color: 'red' };
 
   const startIcon = L.icon({
@@ -53,6 +36,13 @@ export default function Map({
     iconAnchor: [7, 7], // point of the icon which will correspond to marker's location
   });
 
+  const filteredRoute = route.filter((point) => {
+    if (point && point[0] && point[1]) {
+      return true;
+    }
+    //console.warn('Invalid point in route:', point);
+  });
+
   return (
     <MapContainer
       id={id}
@@ -64,10 +54,13 @@ export default function Map({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Polyline pathOptions={lineOptions} positions={route} />
+      <Polyline pathOptions={lineOptions} positions={filteredRoute} />
 
-      <Marker position={route[0]} icon={startIcon}></Marker>
-      <Marker position={route[route.length - 1]} icon={endIcon}></Marker>
+      <Marker position={filteredRoute[0]} icon={startIcon}></Marker>
+      <Marker
+        position={filteredRoute[filteredRoute.length - 1]}
+        icon={endIcon}
+      ></Marker>
     </MapContainer>
   );
 }

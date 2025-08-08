@@ -3094,6 +3094,7 @@ __metadata:
     eslint: "npm:^9"
     eslint-config-next: "npm:15.4.3"
     leaflet: "npm:^1.9.4"
+    leaflet-defaulticon-compatibility: "npm:^0.1.2"
     lucide-react: "npm:^0.525.0"
     next: "npm:15.4.3"
     postcss: "npm:^8.5.6"
@@ -11819,6 +11820,13 @@ __metadata:
   dependencies:
     language-subtag-registry: "npm:^0.3.20"
   checksum: 10c0/9ab911213c4bd8bd583c850201c17794e52cb0660d1ab6e32558aadc8324abebf6844e46f92b80a5d600d0fbba7eface2c207bfaf270a1c7fd539e4c3a880bff
+  languageName: node
+  linkType: hard
+
+"leaflet-defaulticon-compatibility@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "leaflet-defaulticon-compatibility@npm:0.1.2"
+  checksum: 10c0/aac51998bfbfbca65f7d65a6f0c48c8b0dfeba11b627bd2982ff7bcccfcdbc06bbcf04a432753b9fd7b295e38522d8fd77cfe0884a5ac236da4258bda321d89f
   languageName: node
   linkType: hard
 
