@@ -22,16 +22,37 @@ export function ActivityMap({
 }: ActivityMapProps) {
   const lineOptions = { color: 'red' };
 
-  const startIcon = L.icon({
-    iconUrl: '/start.png',
-
+  const startIcon = L.divIcon({
+    html: `<svg width="30" height="30">
+    <circle
+      fill="#33DD33"
+      r="10"
+      cx="11"
+      cy="11"
+      stroke="#666633" stroke-width="1" 
+    />
+  </svg>`,
+    className: 'svg-icon',
     iconSize: [14, 14], // size of the icon
     iconAnchor: [7, 7], // point of the icon which will correspond to marker's location
   });
 
-  const endIcon = L.icon({
-    iconUrl: '/flagg.png',
+  const w = 12;
+  const r = 6;
 
+  const endIcon = L.divIcon({
+    html: `<svg width="30" height="30">
+    <defs>
+      <pattern id="checkerboard" x="2" y="2" width="${w}" height="${w}" patternUnits="userSpaceOnUse">
+        <rect x="0" y="0" width="${r}" height="${r}" fill="black"/>
+        <rect x="${r}" y="${r}" width="${r}" height="${r}" fill="black"/>
+        <rect x="${r}" y="0" width="${r}" height="${r}" fill="white"/>
+        <rect x="0" y="${r}" width="${r}" height="${r}" fill="white"/>
+      </pattern>
+    </defs>
+    <circle fill="url(#checkerboard)" stroke="black" stroke-width="1" r="10" cx="11" cy="11" />
+  </svg>`,
+    className: 'svg-icon',
     iconSize: [14, 14], // size of the icon
     iconAnchor: [7, 7], // point of the icon which will correspond to marker's location
   });

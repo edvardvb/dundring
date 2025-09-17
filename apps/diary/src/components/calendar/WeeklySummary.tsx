@@ -6,13 +6,20 @@ import { formatTime, formatDistance } from '@/utils/calendar';
 interface WeeklySummaryProps {
   week: CalendarWeek;
   weekNumber: number;
+  className?: string;
 }
 
-export function WeeklySummary({ week, weekNumber }: WeeklySummaryProps) {
+export function WeeklySummary({
+  week,
+  weekNumber,
+  className,
+}: WeeklySummaryProps) {
   const { summary } = week;
 
   return (
-    <div className="bg-slate-800 border border-slate-700 rounded-lg p-4">
+    <div
+      className={`bg-slate-800 border border-slate-700 rounded-lg p-4 ${className}`}
+    >
       <h4 className="text-sm font-medium text-slate-300 mb-3">
         Week {weekNumber}
       </h4>

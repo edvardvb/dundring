@@ -23,7 +23,7 @@ export function CalendarGrid({ calendarData }: CalendarGridProps) {
 
         {/* Calendar Grid */}
         <Grid
-          columns="8"
+          columns={`repeat(7, 11%) 1fr`}
           gap="1"
           rows={`repeat(${calendarData.weeks.length + 1}, auto)`}
           width="auto"

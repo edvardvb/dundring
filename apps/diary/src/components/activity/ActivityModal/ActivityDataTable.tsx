@@ -24,7 +24,10 @@ export function ActivityDataTable({ activity }: ActivityDataTableProps) {
 
   return (
     <>
-      <DataList.Root className="p-4">
+      <DataList.Root
+        className="p-4"
+        orientation={{ initial: 'vertical', md: 'horizontal' }}
+      >
         <FormattedDataListItem
           label="Duration"
           value={formatTime(toNumber(activity.moving_time), true)}
